@@ -16,15 +16,6 @@ var (
 	mutex   = &sync.Mutex{}
 )
 
-var AllowedChars = []rune(
-	"abcdefghijklmnopqrstuvwxyz" +
-		"ABCDEFGHIJKLMNOPQRSTUVWXYZ" +
-		"0123456789" +
-		" .,!?;:'\"-_()[]{}\\/@" +
-		"#$%&*+=<>" +
-		"\n",
-)
-
 var historyMutex = &sync.Mutex{}
 
 // IsAllowedMessage checks if the message contains only allowed characters.

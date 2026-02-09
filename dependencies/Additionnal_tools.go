@@ -9,15 +9,8 @@ package NetCat
 
 // IsAllowedMessage checks if the message contains only allowed characters.
 func IsAllowedMessage(s string) bool {
-	for _, r := range s {
-		allowed := false
-		for _, a := range AllowedChars {
-			if r == a {
-				allowed = true
-				break
-			}
-		}
-		if !allowed {
+	for _, char := range s {
+		if char != '\n' && char != '\r' && char != '\t' && char < 32 {
 			return false
 		}
 	}
