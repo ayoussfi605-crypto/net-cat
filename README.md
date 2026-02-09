@@ -51,7 +51,7 @@ After starting, the server listens on the specified port and accepts client conn
 * Go concurrency (goroutines, mutexes, channels)
 * TCP socket programming
 * Real-time chat server architecture
-* Working with `net.Conn`
+* Working with net.Conn
 
 ## Team
 
