@@ -16,8 +16,6 @@ var (
 	mutex   = &sync.Mutex{}
 )
 
-var historyMutex = &sync.Mutex{}
-
 // IsAllowedMessage checks if the message contains only allowed characters.
 func sendPrompt(conn net.Conn, name string) {
 	tm := time.Now().Format("2006-01-02 15:04:05")
@@ -28,23 +26,12 @@ func sendPrompt(conn net.Conn, name string) {
 // HandleConnection manages an individual client's connection to the chat server.
 func HandleConnection(conn net.Conn) {
 	defer conn.Close()
-	history, err := os.ReadFile("history.txt")
-	if err != nil {
-		log.Println("error reading history file:", err)
-		history = []byte{}
-	}
 	welcomeLogo, err := os.ReadFile("logo.txt")
 	if err != nil {
 		log.Println("error reading welcome file:", err)
 		welcomeLogo = []byte("Welcome to the Chat!\n")
 	}
-	if len(history) > 0 {
-		welcomeLogo = append(welcomeLogo, []byte("\n----- Chat History -----\n")...)
-		welcomeLogo = append(welcomeLogo, history...)
-		conn.Write(welcomeLogo)
-	} else {
-		conn.Write(welcomeLogo)
-	}
+	conn.Write(welcomeLogo)
 	if err != nil {
 		log.Println("error reading welcome file:", err)
 		return
@@ -72,6 +59,16 @@ func HandleConnection(conn net.Conn) {
 	}
 	mutex.Lock()
 	clients[conn] = name
+	history, err := os.ReadFile("history.txt")
+	if err != nil {
+		log.Println("error reading history file:", err)
+		history = []byte{}
+	}
+	if len(history) > 0 {
+		conn.Write([]byte("\n--- Chat History ---\n"))
+		conn.Write(history)
+		conn.Write([]byte("--- End of History ---\n"))
+	}
 	mutex.Unlock()
 	log.Printf("\n%s has joined our chat...", name)
 	joinMsg := fmt.Sprintf("\n%s has joined our chat...\n", name)

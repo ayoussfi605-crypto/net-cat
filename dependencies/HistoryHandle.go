@@ -8,8 +8,8 @@ import (
 
 // AppendToHistory appends a message to the history.txt file in a thread-safe manner.
 func AppendToHistory(message string) {
-	historyMutex.Lock()
-	defer historyMutex.Unlock()
+	mutex.Lock()
+	defer mutex.Unlock()
 
 	file, err := os.OpenFile(
 		"history.txt",
